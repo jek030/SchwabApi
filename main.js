@@ -86,9 +86,7 @@ function getTestAccounts () {
         return;
     }
     try {
-      console.log( typeof jsonString);
-      const json = JSON.parse( jsonString.toString().trim());  
-      //console.log( json);
+      const json = JSON.parse(jsonString);  
 
        for (let acc in json) {
         console.log(`Index: ${acc} Object: ${json[acc]}`)
@@ -135,18 +133,18 @@ async function getAccounts() {
   })
   console.log(JSON.stringify(res.data,null, 2));
   
-  //console.log("Looping through accounts...");
-//
-  //for (let acc in res.data) {
-  //  console.log(`Index: ${acc} Object: ${res.data[acc]}`)
-  //  
-  //  let accounts = res.data[acc]
-//
-  //  console.log("Account Number: " + accounts.securitiesAccount['accountNumber'])
-//
-  //  let positions = accounts.securitiesAccount['positions']
-  //  positions.forEach(pos => console.log(pos))
-  //}
+  console.log("Looping through accounts...");
+
+  for (let acc in res.data) {
+    console.log(`Index: ${acc} Object: ${res.data[acc]}`)
+    
+    let accounts = res.data[acc]
+
+    console.log("Account Number: " + accounts.securitiesAccount['accountNumber'])
+
+    let positions = accounts.securitiesAccount['positions']
+    positions.forEach(pos => console.log(pos))
+  }
 
 } 
 
