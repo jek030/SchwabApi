@@ -41,7 +41,7 @@ function main() {
     //todo have script save the accessToken and refreshToken to database or ..env? so that not hardcoding 
 
    //getAccounts(); //get accounts from API
-   getTestAccounts(); //get static test accounts from file
+     getTestAccounts(); //get static test accounts from file
 
    //getTicker('TSLA')
     //post request to get refresh and access tokens
@@ -80,14 +80,15 @@ function main() {
 
 
 function getTestAccounts () {
-  fs.readFile('./test/accounts.json', 'utf8', (err, jsonString) => {
+  fs.readFile('./test/accounts.json', 'utf-8', (err, jsonString) => {
     if (err) {
         console.log("Error reading file:", err);
         return;
     }
     try {
-      console.log(jsonString);
-      const json = JSON.parse(jsonString);  
+      console.log( typeof jsonString);
+      const json = JSON.parse( jsonString.toString().trim());  
+      //console.log( json);
 
        for (let acc in json) {
         console.log(`Index: ${acc} Object: ${json[acc]}`)
@@ -134,18 +135,18 @@ async function getAccounts() {
   })
   console.log(JSON.stringify(res.data,null, 2));
   
-  console.log("Looping through accounts...");
-
-  for (let acc in res.data) {
-    console.log(`Index: ${acc} Object: ${res.data[acc]}`)
-    
-    let accounts = res.data[acc]
-
-    console.log("Account Number: " + accounts.securitiesAccount['accountNumber'])
-
-    let positions = accounts.securitiesAccount['positions']
-    positions.forEach(pos => console.log(pos))
-  }
+  //console.log("Looping through accounts...");
+//
+  //for (let acc in res.data) {
+  //  console.log(`Index: ${acc} Object: ${res.data[acc]}`)
+  //  
+  //  let accounts = res.data[acc]
+//
+  //  console.log("Account Number: " + accounts.securitiesAccount['accountNumber'])
+//
+  //  let positions = accounts.securitiesAccount['positions']
+  //  positions.forEach(pos => console.log(pos))
+  //}
 
 } 
 
