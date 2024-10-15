@@ -36,13 +36,14 @@ function main() {
     //right now you need to copy the New access token print from refreshAuthToken into .env
     //todo have script save the accessToken and refreshToken to database or ..env? so that not hardcoding 
 
-   getAccounts(); //get accounts from API
+   //getAccounts(); //get accounts from API
      //getTestAccounts(); //get static test accounts from file
 
 
     //let stocks = ["TSLA", "AAPL","SERV","NVDA", "CLOV"];
     //stocks.forEach(stock => getTicker(stock)) 
-   //getTicker('TSLA');
+   getTicker('TSLA');
+
 
    //getTestTickerTsla("TSLA");
     //post request to get refresh and access tokens
@@ -166,16 +167,6 @@ async function getAccounts() {
   
   console.log("Looping through accounts...");
 
-  //for (let acc in res.data) {
-  //  console.log(`Index: ${acc} Object: ${res.data[acc]}`)
-  //  
-  //  let accounts = res.data[acc]
-//
-  //  console.log("Account Number: " + accounts.securitiesAccount['accountNumber'])
-//
-  //  let positions = accounts.securitiesAccount['positions']
-  //  positions.forEach(pos => console.log(pos))
-  //}
   let json = res.data;
   for (let acc in json) {
 
@@ -235,5 +226,11 @@ async function getTicker(ticker) {
                          json[ticker].quote["lowPrice"])
 
       stock.printData();
+
+      if (stock.isVolumeAbove10DayAvg) {
+        console.log(" "+stock.symbol +" daily volume: " + stock.volume.toLocaleString('en-US') + " is above 10 day average volume: " + stock.tenDayVolume.toLocaleString('en-US'))
+      } else {
+        console.log(" "+stock.symbol +" daily volume: " + stock.volume.toLocaleString('en-US') + " is below 10 day average volume: " + stock.tenDayVolume.toLocaleString('en-US'))
+      }
 } 
    main()

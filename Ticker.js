@@ -35,6 +35,12 @@ class Stock {
         this.dailyLow = dailyLow;
     }
 
+    //TODO: create some functions with this data
+
+    isVolumeAbove10DayAvg() {
+        return this.volume > this.tenDayVolume;
+    }
+
     printData() {
       console.log(this.symbol 
         + "\n Daily volume: " + this.volume.toLocaleString('en-US')
