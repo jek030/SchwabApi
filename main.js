@@ -36,11 +36,15 @@ function main() {
     //right now you need to copy the New access token print from refreshAuthToken into .env
     //todo have script save the accessToken and refreshToken to database or ..env? so that not hardcoding 
 
-   //getAccounts(); //get accounts from API
+   getAccounts(); //get accounts from API
      //getTestAccounts(); //get static test accounts from file
 
+
+    //let stocks = ["TSLA", "AAPL","SERV","NVDA", "CLOV"];
+    //stocks.forEach(stock => getTicker(stock)) 
    //getTicker('TSLA');
-   getTestTickerTsla("TSLA");
+
+   //getTestTickerTsla("TSLA");
     //post request to get refresh and access tokens
 
   }
@@ -158,24 +162,47 @@ async function getAccounts() {
       Authorization: "Bearer " + accessToken,
     },
   })
-  console.log(JSON.stringify(res.data,null, 2));
+  //console.log(JSON.stringify(res.data,null, 2));
   
   console.log("Looping through accounts...");
 
-  for (let acc in res.data) {
-    console.log(`Index: ${acc} Object: ${res.data[acc]}`)
-    
-    let accounts = res.data[acc]
+  //for (let acc in res.data) {
+  //  console.log(`Index: ${acc} Object: ${res.data[acc]}`)
+  //  
+  //  let accounts = res.data[acc]
+//
+  //  console.log("Account Number: " + accounts.securitiesAccount['accountNumber'])
+//
+  //  let positions = accounts.securitiesAccount['positions']
+  //  positions.forEach(pos => console.log(pos))
+  //}
+  let json = res.data;
+  for (let acc in json) {
 
-    console.log("Account Number: " + accounts.securitiesAccount['accountNumber'])
+    let accounts = json[acc]
+    console.log("\nAccount Number: " + accounts.securitiesAccount['accountNumber'])
 
     let positions = accounts.securitiesAccount['positions']
-    positions.forEach(pos => console.log(pos))
-  }
-} 
+    let openPnl = 0
+    let stocks = {};
+
+    for (let i = 0; i < positions.length; i++) {
+      stocks[i] = new Position(positions[i].instrument.symbol,
+                             positions[i].longQuantity,
+                             Number(positions[i].averagePrice.toFixed(2)) ,
+                             Number(positions[i].longOpenProfitLoss.toFixed(2)));
+      stocks[i].printData();
+      openPnl  += stocks[i].profitLoss ;
+
+      await getTicker(positions[i].instrument.symbol);
+    }
+    console.log("\nUnrealized Profit/Loss for account: " + accounts.securitiesAccount['accountNumber'] + " is " + openPnl.toFixed(2))
+
+  } 
+}
 
 async function getTicker(ticker) {
-  console.log("*** TICKER API TEST CALL: " + ticker );
+  console.log("*** TICKER API CALL: " + ticker );
 
   const res = await axios({
     method: "GET",
@@ -187,7 +214,26 @@ async function getTicker(ticker) {
       Authorization: "Bearer " + accessToken,
     },
   });
-  console.log(JSON.stringify(res.data,null, 2));
+  //console.log(JSON.stringify(res.data,null, 2));
+  const json = res.data;
+      
+  let stock = new Ticker(json[ticker].symbol,  
+                         json[ticker].quote["totalVolume"],
+                         json[ticker].fundamental["avg10DaysVolume"],
+                         json[ticker].fundamental["avg1YearVolume"], 
+                         json[ticker].fundamental["divYield"],
+                         json[ticker].fundamental["eps"],
+                         json[ticker].fundamental["peRatio"], 
+                         json[ticker].reference["description"], 
+                         json[ticker].quote["closePrice"], 
+                         json[ticker].quote["openPrice"], 
+                         json[ticker].quote["mark"], 
+                         json[ticker].regular["regularMarketLastPrice"],
+                         json[ticker].regular["regularMarketNetChange"],
+                         json[ticker].regular["regularMarketPercentChange"],
+                         json[ticker].quote["highPrice"], 
+                         json[ticker].quote["lowPrice"])
 
+      stock.printData();
 } 
    main()

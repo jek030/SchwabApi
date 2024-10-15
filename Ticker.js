@@ -1,4 +1,4 @@
-class Position {
+class Stock {
     // Constructor method
     constructor(symbol, 
         volume, 
@@ -41,8 +41,9 @@ class Position {
         + "\n Opening price: $" + this.openPrice
         + "\n Last price during regular market hours: $" + this.regularMarketLastPrice
         + "\n Percent change: " + Number(this.regularMarketPercentChange).toFixed(2) + "%"
+        + "\n Last price: $" + this.mark
       )
     }
   }
 
-  module.exports = Position;
+  module.exports = Stock;
