@@ -1,8 +1,9 @@
 const clientId = process.env.CLIENT_ID;
 const clientSecret = process.env.CLIENT_SECRET;
 let refreshToken = process.env.REFRESH_TOKEN;
-
+let accessToken = process.env.ACCESS_TOKEN;
 const axios = require("axios");
+
  async function refreshAuthToken() {
     console.log("*** REFRESHING ACCESS TOKEN ***");
   
@@ -32,4 +33,35 @@ const axios = require("axios");
       throw error;
     }
   }
- module.exports = {refreshAuthToken};
+
+  
+async function getAuthToken() {
+    // Base64 encode the client_id:client_secret
+    const base64Credentials = Buffer.from(`${clientId}:${clientSecret}`).toString("base64");
+  
+    try {
+      const response = await axios({
+        method: "POST",
+        url: "https://api.schwabapi.com/v1/oauth/token",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+          Authorization: `Basic ${base64Credentials}`,
+        },
+        data: `grant_type=authorization_code&code=${authorizationCode}&redirect_uri=${redirectUri}`,
+      });
+  
+      console.log("*** GOT NEW AUTH TOKEN ***");
+  
+      // Log the refresh_token and access_token before exiting
+      accessToken = response.data.access_token;
+      refreshToken = response.data.refresh_token;
+      console.log("Access Token:", accessToken);
+      console.log("Refresh Token:", refreshToken);
+  
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching auth token:", error);
+      throw error;
+    }
+  }
+ module.exports = {refreshAuthToken, getAuthToken};
