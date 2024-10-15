@@ -2,8 +2,8 @@ require('dotenv').config();
 const fs = require('fs');
 const axios = require("axios");
 const Position = require('./Position.js');
+const Ticker = require('./Ticker.js');
 schwab = require("./schwab-tokens.js")
-Ticker = require("./Position.js")
 
 // Load from .env file
 const clientId = process.env.CLIENT_ID;
@@ -40,7 +40,7 @@ function main() {
      //getTestAccounts(); //get static test accounts from file
 
    //getTicker('TSLA');
-   getTestTickerTsla();
+   getTestTickerTsla("TSLA");
     //post request to get refresh and access tokens
 
   }
@@ -83,7 +83,7 @@ function getTestAccounts () {
 });
 }
 
-function getTestTickerTsla () {
+function getTestTickerTsla (ticker) {
   fs.readFile('./test/tsla.json', 'utf-8', (err, jsonString) => {
     if (err) {
         console.log("Error reading file:", err);
@@ -92,10 +92,31 @@ function getTestTickerTsla () {
     try {
       const json = JSON.parse(jsonString);  
       
-      console.log(json["TSLA"].symbol);
-      console.log(json["TSLA"].quote);
+      //console.log(json[ticker].symbol);
+      //console.log(json[ticker].quote);
+      //console.log(json[ticker].reference);
+      //console.log(json[ticker].regular);
+      //console.log(json[ticker].fundamental);
+      //console.log(json[ticker].quote["totalVolume"]);
 
+      let stock = new Ticker(json[ticker].symbol,  
+                              json[ticker].quote["totalVolume"],
+                              json[ticker].fundamental["avg10DaysVolume"],
+                              json[ticker].fundamental["avg1YearVolume"], 
+                              json[ticker].fundamental["divYield"],
+                              json[ticker].fundamental["eps"],
+                              json[ticker].fundamental["peRatio"], 
+                              json[ticker].reference["description"], 
+                              json[ticker].quote["closePrice"], 
+                              json[ticker].quote["openPrice"], 
+                              json[ticker].quote["mark"], 
+                              json[ticker].regular["regularMarketLastPrice"],
+                              json[ticker].regular["regularMarketNetChange"],
+                              json[ticker].regular["regularMarketPercentChange"],
+                              json[ticker].quote["highPrice"], 
+                              json[ticker].quote["lowPrice"])
 
+      stock.printData();
        for (let acc in json) {
         //console.log(`Index: ${acc} Object: ${json[acc]}`)
     //

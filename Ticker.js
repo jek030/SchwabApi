@@ -19,7 +19,7 @@ class Position {
 
         this.symbol = symbol;
         this.volume = volume;
-         this.tenDayVolume = tenDayVolume;
+        this.tenDayVolume = tenDayVolume;
         this.oneYearVolume = oneYearVolume;
         this.dividendYield = dividendYield;
         this.earningsPerShare = earningsPerShare;
@@ -34,14 +34,15 @@ class Position {
         this.dailyHigh = dailyHigh;
         this.dailyLow = dailyLow;
     }
-    // Instance method
-    //printData() {
-    //  console.log(this.symbol 
-    //    + "\n Quantity: " + this.quantity  
-    //    + "\n Average Price: " + this.averagePrice
-    //    + "\n Unrealized P/L: " + this.profitLoss
-    //  )
-    //}
+
+    printData() {
+      console.log(this.symbol 
+        + "\n Daily volume: " + this.volume.toLocaleString('en-US')
+        + "\n Opening price: $" + this.openPrice
+        + "\n Last price during regular market hours: $" + this.regularMarketLastPrice
+        + "\n Percent change: " + Number(this.regularMarketPercentChange).toFixed(2) + "%"
+      )
+    }
   }
 
   module.exports = Position;
