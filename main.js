@@ -2,7 +2,7 @@ require('dotenv').config();
 const fs = require('fs');
 const axios = require("axios");
 const Position = require('./Position.js');
-const Ticker = require('./Ticker.js');
+const Stock = require('./Stock.js');
 schwab = require("./schwab-tokens.js")
 
 // Load from .env file
@@ -104,7 +104,7 @@ function getTestTickerTsla (ticker) {
       //console.log(json[ticker].fundamental);
       //console.log(json[ticker].quote["totalVolume"]);
 
-      let stock = new Ticker(json[ticker].symbol,  
+      let stock = new Stock(json[ticker].symbol,  
                               json[ticker].quote["totalVolume"],
                               json[ticker].fundamental["avg10DaysVolume"],
                               json[ticker].fundamental["avg1YearVolume"], 

@@ -1,0 +1,69 @@
+{
+    "TSLA": {
+      "assetMainType": "EQUITY",
+      "assetSubType": "COE",
+      "quoteType": "NBBO",
+      "realtime": true,
+      "ssid": 1948561409,
+      "symbol": "TSLA",
+      "fundamental": {
+        "avg10DaysVolume": 84613235,
+        "avg1YearVolume": 100668715,
+        "divAmount": 0,
+        "divFreq": 0,
+        "divPayAmount": 0,
+        "divYield": 0,
+        "eps": 4.3,
+        "fundLeverageFactor": 0,
+        "lastEarningsDate": "2024-07-23T04:00:00Z",
+        "peRatio": 61.23344
+      },
+      "quote": {
+        "52WeekHigh": 271,
+        "52WeekLow": 138.8025,
+        "askMICId": "ARCX",
+        "askPrice": 219.05,
+        "askSize": 32,
+        "askTime": 1728947241838,
+        "bidMICId": "ARCX",
+        "bidPrice": 219.01,
+        "bidSize": 1,
+        "bidTime": 1728947218433,
+        "closePrice": 217.8,
+        "highPrice": 221.91,
+        "lastMICId": "XADF",
+        "lastPrice": 219.03,
+        "lastSize": 1,
+        "lowPrice": 213.74,
+        "mark": 219.05,
+        "markChange": 1.25,
+        "markPercentChange": 0.57392103,
+        "netChange": 1.23,
+        "netPercentChange": 0.56473829,
+        "openPrice": 220.13,
+        "postMarketChange": -0.13,
+        "postMarketPercentChange": -0.05931739,
+        "quoteTime": 1728947241838,
+        "securityStatus": "Normal",
+        "totalVolume": 86179306,
+        "tradeTime": 1728947246256
+      },
+      "reference": {
+        "cusip": "88160R101",
+        "description": "TESLA INC",
+        "exchange": "Q",
+        "exchangeName": "NASDAQ",
+        "isHardToBorrow": false,
+        "isShortable": true,
+        "htbQuantity": 28420897,
+        "htbRate": 0
+      },
+      "regular": {
+        "regularMarketLastPrice": 219.16,
+        "regularMarketLastSize": 2231149,
+        "regularMarketNetChange": 1.36,
+        "regularMarketPercentChange": 0.62442608,
+        "regularMarketTradeTime": 1728936000082
+      }
+    }
+  }
