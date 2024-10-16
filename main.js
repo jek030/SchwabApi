@@ -42,8 +42,10 @@ function main() {
 
     //let stocks = ["TSLA", "AAPL","SERV","NVDA", "CLOV"];
     //stocks.forEach(stock => getTicker(stock)) 
-   getTicker('TSLA');
+   //getTicker('TSLA');
 
+
+   getYearlyPriceHistory("NVDA","10-14-2024",  "10-16-2024");
 
    //getTestTickerTsla("TSLA");
     //post request to get refresh and access tokens
@@ -151,7 +153,7 @@ function getTestTickerTsla (ticker) {
 }
 
 async function getAccounts() {
-  console.log("*** API TEST CALL: ACCOUNTS ***");
+  console.log("*** API CALL: ACCOUNTS ***");
   //get accounts from API. For now we'll use accounts.json...
 
   const res = await axios({
@@ -190,6 +192,28 @@ async function getAccounts() {
     console.log("\nUnrealized Profit/Loss for account: " + accounts.securitiesAccount['accountNumber'] + " is " + openPnl.toFixed(2))
 
   } 
+}
+
+async function getYearlyPriceHistory(ticker, startDate, endDate) {
+  console.log(`*** API CALL: PRICE HISTORY: ${ticker} ***`);
+  //get accounts from API. For now we'll use accounts.json...
+
+  const startDateMilliseconds = new Date(startDate).getTime();
+  const endDateMilliseconds = new Date(endDate).getTime();
+
+
+  const res = await axios({
+    method: "GET",
+    url: `https://api.schwabapi.com/marketdata/v1/pricehistory?symbol=${ticker}&periodType=year&frequencyType=daily&startDate=${startDateMilliseconds}&endDate=${endDateMilliseconds}&needPreviousClose=false`,
+    contentType: "application/json",
+    headers: {
+      "Accept-Encoding": "application/json",
+      Authorization: "Bearer " + accessToken,
+    },
+  })
+  const json = res.data;
+
+  console.log(JSON.stringify(json,null,2));
 }
 
 async function getTicker(ticker) {
