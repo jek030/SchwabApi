@@ -45,7 +45,7 @@ function main() {
    //getTicker('TSLA');
 
 
-   getYearlyPriceHistory("NVDA","10-14-2024",  "10-16-2024");
+   getYearlyPriceHistory("AUR","9-16-2024",  "10-16-2024");
 
    //getTestTickerTsla("TSLA");
     //post request to get refresh and access tokens
@@ -195,7 +195,7 @@ async function getAccounts() {
 }
 
 async function getYearlyPriceHistory(ticker, startDate, endDate) {
-  console.log(`*** API CALL: PRICE HISTORY: ${ticker} ***`);
+  console.log(`*** API CALL: PRICE HISTORY: ${ticker} from ${startDate} until ${endDate}***`);
   //get accounts from API. For now we'll use accounts.json...
 
   const startDateMilliseconds = new Date(startDate).getTime();
@@ -214,7 +214,26 @@ async function getYearlyPriceHistory(ticker, startDate, endDate) {
   const json = res.data;
 
   console.log(JSON.stringify(json,null,2));
+
+  getAverageVolume(json);
 }
+
+
+/**
+ * gets the average volume of the close price based on the price history in the json
+ * @param {*data returned by getYearlyPri} json 
+ */
+function getAverageVolume(json) {
+  let vol = 0
+  let days = json.candles.length;
+  console.log(json);
+  for (let day in json.candles) {
+    vol += json.candles[day].volume;
+    console.log(`DATE: ${new Date(json.candles[day].datetime).toLocaleDateString()} Volume: ${json.candles[day].volume} Close: ${json.candles[day].close}`)
+  }
+  console.log(`Average volume over ${days} days: ${vol/days}`)
+}
+
 
 async function getTicker(ticker) {
   console.log("*** TICKER API CALL: " + ticker );
@@ -232,7 +251,7 @@ async function getTicker(ticker) {
   //console.log(JSON.stringify(res.data,null, 2));
   const json = res.data;
       
-  let stock = new Ticker(json[ticker].symbol,  
+  let stock = new Stock(json[ticker].symbol,  
                          json[ticker].quote["totalVolume"],
                          json[ticker].fundamental["avg10DaysVolume"],
                          json[ticker].fundamental["avg1YearVolume"], 
