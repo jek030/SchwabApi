@@ -45,7 +45,8 @@ function main() {
    //getTicker('TSLA');
 
 
-   getYearlyPriceHistory("AUR","9-16-2024",  "10-16-2024");
+    getYearlyPriceHistory("CLOV","9-11-2024",  "10-17-2024");
+    //getYearlyTestPriceHistory();
 
    //getTestTickerTsla("TSLA");
     //post request to get refresh and access tokens
@@ -215,24 +216,102 @@ async function getYearlyPriceHistory(ticker, startDate, endDate) {
 
   console.log(JSON.stringify(json,null,2));
 
-  getAverageVolume(json);
+  let avgVol = getAvgVolumeAndClose(json);
+
+  
+compareAvgVolume(json, avgVol);
+calculateAvgPriceRange(json, 5);
+console.log(json);
+
 }
+
+/**
+ * Add property isGtAvgVolume to candles, sets it to true if volume is above average volume
+ * @param {*json} json 
+ * @param {*average volume} avgVol 
+ */
+function compareAvgVolume(json, avgVol) {
+  for (let day in json.candles) {
+     json.candles[day].isGtAvgVolume = json.candles[day].volume > avgVol;
+  }
+}
+
+/**
+ * 
+ * @param {Calculates the average daily range over a certain time period.} json 
+ * @param {*} days 
+ */
+function calculateAvgPriceRange(json, days) {
+console.log(`Calculating ADR (average price range) over ${days} days...`)
+  for (let day in json.candles) {
+
+    if (day < days) {
+      json.candles[day].averagePriceRange = 0;
+      json.candles[day].averagePriceRangePercentage = 0;
+
+
+    } else {
+      let range = 0;
+      let rangePercent = 0;
+      for (let i = 0; i < days; i++){
+        range += Math.abs(json.candles[day - i].high - json.candles[day - i].low)
+        rangePercent += Math.abs((json.candles[day - i].high / json.candles[day - i].low - 1) * 100 )
+      }
+      json.candles[day].averagePriceRange = Number((range / days).toFixed(2));
+      json.candles[day].averagePriceRangePercentage = Number((rangePercent / days).toFixed(2));
+    }
+ }
+
+}
+
 
 
 /**
  * gets the average volume of the close price based on the price history in the json
  * @param {*data returned by getYearlyPri} json 
  */
-function getAverageVolume(json) {
+function getAvgVolumeAndClose(json) {
   let vol = 0
+
   let days = json.candles.length;
   console.log(json);
   for (let day in json.candles) {
     vol += json.candles[day].volume;
     console.log(`DATE: ${new Date(json.candles[day].datetime).toLocaleDateString()} Volume: ${json.candles[day].volume} Close: ${json.candles[day].close}`)
   }
-  console.log(`Average volume over ${days} days: ${vol/days}`)
+
+  let avgVol = Number(vol/days).toFixed(2)
+  console.log(`Average volume over ${days} days: ${avgVol}`)
+return avgVol;  
 }
+
+
+
+function getYearlyTestPriceHistory() {
+  console.log(`***Testing: PRICE HISTORY: nvdaYearlyData.json`);
+  
+  fs.readFile('./test/nvdaYearlyData.json', 'utf-8', (err, jsonString) => {
+    if (err) {
+        console.log("Error reading file:", err);
+        return;
+    }
+    try {
+      const json = JSON.parse(jsonString);  
+
+
+      console.log(JSON.stringify(json,null,2));
+    
+      getAvgVolumeAndClose(json);
+
+
+
+       
+    } catch(err) {
+        console.log('Error parsing JSON string:', err);
+    }
+});
+}
+
 
 
 async function getTicker(ticker) {
