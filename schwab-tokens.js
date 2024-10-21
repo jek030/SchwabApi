@@ -3,6 +3,10 @@ const clientSecret = process.env.CLIENT_SECRET;
 let refreshToken = process.env.REFRESH_TOKEN;
 let accessToken = process.env.ACCESS_TOKEN;
 const axios = require("axios");
+const returnedLink = process.env.RETURNED_LINK;
+const redirectUri = process.env.REDIRECT_URI;
+
+
 
  async function refreshAuthToken() {
     console.log("*** REFRESHING ACCESS TOKEN ***");
@@ -38,7 +42,9 @@ const axios = require("axios");
 async function getAuthToken() {
     // Base64 encode the client_id:client_secret
     const base64Credentials = Buffer.from(`${clientId}:${clientSecret}`).toString("base64");
-  
+    let authorizationCode = returnedLink.substring( returnedLink.indexOf("code") + 5, returnedLink.indexOf("%40") ) + "@"
+    console.log(`Code: ${authorizationCode}`);
+    
     try {
       const response = await axios({
         method: "POST",

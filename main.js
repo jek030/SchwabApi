@@ -19,24 +19,18 @@ let refreshToken = process.env.REFRESH_TOKEN;
 function main() {
     //paste this link into browser
     const url =  'URL: ' + `https://api.schwabapi.com/v1/oauth/authorize?&client_id=${clientId}&redirect_uri=${redirectUri}`
-
+  //authenticate with brokerage account login, then paste link into this const
+    //todo: automate retrieving this URL, instead of pasting it into RETURN_LINK
     console.log(url);
 
-    //authenticate with brokerage account login, then paste link into this const
-    //todo: automate retrieving this URL, instead of pasting it into RETURN_LINK
-    const returnedLink = process.env.RETURNED_LINK;
-
-     authorizationCode = returnedLink.substring( returnedLink.indexOf("code") + 5, returnedLink.indexOf("%40") ) + "@"
-    //get the code from returnedLink
-    console.log(`Code: ${authorizationCode}`);
     //use the authorizationCode to get the access and refresh token. 
-  
     //schwab.getAuthToken();
+
     //schwab.refreshAuthToken();
     //right now you need to copy the New access token print from refreshAuthToken into .env
     //todo have script save the accessToken and refreshToken to database or ..env? so that not hardcoding 
 
-   //getAccounts(); //get accounts from API
+   getAccounts(); //get accounts from API
      //getTestAccounts(); //get static test accounts from file
 
 
@@ -45,7 +39,7 @@ function main() {
    //getTicker('TSLA');
 
 
-    getYearlyPriceHistory("CLOV","9-11-2024",  "10-17-2024");
+     // getYearlyPriceHistory("SERV","9-11-2024",  "10-20-2024");
     //getYearlyTestPriceHistory();
 
    //getTestTickerTsla("TSLA");
